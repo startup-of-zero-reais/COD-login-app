@@ -3,10 +3,9 @@
 .textField {
     transition: color 200ms, border-color 200ms;
 
-    background: linear-gradient(90deg, #{$gold400}20 30%, #{$purple600}20 90%);
-
     & div[class^="MuiOutlinedInput"] {
         border-color: #{$gold400};
+        background: linear-gradient(90deg, #{$gold400}20 30%, #{$purple600}20 90%);
 
         &:focus-within {
             & div[class^="MuiInputAdornment"] {
@@ -25,6 +24,11 @@
         &:hover:not(&:active) fieldset[class$="notchedOutline"] {
             border-color: $gold400;
         }
+    }
+
+    & p[class^="MuiFormHelperText-root"] {
+        color: $silver200;
+        margin-top: map-get($gutters, "xs");
     }
 
     & input {
