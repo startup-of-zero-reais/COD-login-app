@@ -6,11 +6,12 @@ const NotFound = () => {
     const { back } = useRouter();
 
     return (
-        <Grid container padding={ 8 }>
+        <Grid container paddingY={ 8 }>
             <Grid
                 item
                 display={ "grid" }
                 alignContent={ "center" }
+                justifyContent={ "center" }
                 marginX={ "auto" }
                 sm={ 12 }
                 md={ 8 }
@@ -36,7 +37,7 @@ const NotFound = () => {
                         <FiArrowLeftCircle size={ 24 }/>
                         <span>Voltar</span>
                     </Button>
-                    
+
                 </Typography>
             </Grid>
         </Grid>
