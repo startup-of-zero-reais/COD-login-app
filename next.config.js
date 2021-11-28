@@ -15,7 +15,15 @@ module.exports = {
             {
                 source: "/",
                 destination: "/login",
-                permanent: true
+                permanent: true,
+            }
+        ]
+    },
+    async rewrites() {
+        return [
+            {
+                source: "/",
+                destination: "/login",
             }
         ]
     }
