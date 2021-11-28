@@ -1,19 +1,19 @@
 version: "3.9"
 
 services:
-  app:
-    build: .
-    container_name: cod-login-app
-    volumes:
-      - .:/www/app
-      - ./node_modules:/www/app/node_modules
-    ports:
-      - "3000:3000"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    networks:
-      - cod-login-net
+    app:
+        build: .
+        container_name: cod-login-app
+        volumes:
+            - .:/www/app
+            - ./node_modules:/www/app/node_modules
+        ports:
+            - "3000:3000"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        networks:
+            - cod-login-net
 
 networks:
-  cod-login-net:
-    driver: bridge
+    cod-login-net:
+        driver: bridge
