@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { usersApi } from "@/data/requester";
+import { usersApi } from "@/data/apis";
+import { AxiosError } from "axios";
 
 type Data = {
-	token?: string
-	name: string;
-}
+	token: string;
+	user: {
+		name: string;
+	}
+} | { message: string }
 
 type LoginResponse = {
 	token: string;
@@ -13,21 +16,51 @@ type LoginResponse = {
 	}
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler( req: NextApiRequest, res: NextApiResponse<Data> ) {
 	const { email, password } = req.body
 
-	const [ { token, user }, err ] = await usersApi.post<LoginResponse>("/auth", JSON.stringify({
-		email,
-		password
-	}))
+	try {
+		const { data: response } = await usersApi.post<LoginResponse>("/auth", JSON.stringify({
+			email,
+			password
+		}))
 
+		return res.status(200).json(response)
+	} catch (e) {
+		const err = new LoginErrors(e as any);
 
-	if (err) {
-		return res.status(400).json(err)
+		const { statusCode, message } = err.getFinalResponse()
+
+		return res.status(statusCode).json({
+			message
+		})
+	}
+}
+
+class LoginErrors {
+	constructor( private readonly err: AxiosError ) {
 	}
 
-	return res.status(200).json({
-		name: user.name,
-		token,
-	})
+	getStatus(): number {
+		return this.err.response?.status || 500
+	}
+
+	getMessage(): string {
+		return this.err.response?.data.message || "Não autorizado"
+	}
+
+	translateMessage(): string {
+		switch (this.getMessage()) {
+			case "Unauthorized":
+			default:
+				return "Credenciais inválidas"
+		}
+	}
+
+	getFinalResponse(): { statusCode: number; message: string } {
+		return {
+			statusCode: this.getStatus(),
+			message: this.translateMessage()
+		}
+	}
 }

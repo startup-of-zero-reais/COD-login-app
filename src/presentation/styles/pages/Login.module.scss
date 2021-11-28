@@ -27,7 +27,7 @@
     background: linear-gradient(135deg, #{$silver100}40 30%, #{$gold100}10 70%);
     backdrop-filter: blur(10px);
     border: 0;
-    box-shadow: 0 3px 5px 2px #{$goldMain}30;
+    box-shadow: 0 3px 5px 2px #{$purple100}16;
     color: white;
     @include flex-column;
     gap: map-get($gutters, "md");
