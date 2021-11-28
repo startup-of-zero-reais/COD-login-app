@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material";
-import { purplePalette, goldPalette, silverPalette } from "./colors";
+import { goldPalette, purplePalette, silverPalette } from "./colors";
 
 export const theme = createTheme({
 	palette: {
@@ -11,4 +11,7 @@ export const theme = createTheme({
 			paper: (silverPalette as any)["800"]
 		},
 	},
+	typography: {
+		fontFamily: "Poppins, Montserrat, Red Hat Display, sans-serif",
+	}
 })
