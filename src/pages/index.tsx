@@ -3,11 +3,14 @@ import Head from 'next/head'
 import Link from "next/link"
 import { useRouter } from "next/router";
 import styles from '@/presentation/styles/pages/Home.module.scss';
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
     const { push } = useRouter()
 
-    push("/login").then()
+    useEffect(() => {
+        push("/login").then()
+    }, [ push ])
 
     return (
         <div className={ styles.container }>
