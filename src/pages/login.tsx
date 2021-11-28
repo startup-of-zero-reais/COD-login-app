@@ -30,12 +30,14 @@ const Login: NextPage<LoginProps> = () => {
         boxStyles,
         outerBox,
         formStyles,
-        bottomForm
+        bottomForm,
+        buttons
     } = useMemo(() => ({
         boxStyles: classNames(styles.box),
         outerBox: classNames(styles.outerBox),
         formStyles: classNames(styles.form),
         bottomForm: classNames(styles.bottomForm),
+        buttons: classNames(styles.buttons),
     }), [])
 
     return (
@@ -75,7 +77,7 @@ const Login: NextPage<LoginProps> = () => {
 
                         <div className={ bottomForm }>
                             <Link passHref href={ "/esqueci-minha-senha" }>
-                                <MuiLink>Esqueci minha senha</MuiLink>
+                                <MuiLink underline={ "none" }>Esqueci minha senha</MuiLink>
                             </Link>
 
                             <FormControlLabel
@@ -84,9 +86,15 @@ const Login: NextPage<LoginProps> = () => {
                             />
                         </div>
 
-                        <Button variant={ "contained" } fullWidth size={ "large" }>
-                            Acessar
-                        </Button>
+                        <div className={ buttons }>
+                            <Button variant={ "contained" } fullWidth size={ "large" }>
+                                Acessar
+                            </Button>
+
+                            <Link passHref href={ "/cadastrar" }>
+                                <MuiLink textAlign={ "center" } underline={ "none" }>Cadastre-se</MuiLink>
+                            </Link>
+                        </div>
                     </Box>
                 </div>
             </Grow>

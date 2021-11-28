@@ -59,3 +59,9 @@
         }
     }
 }
+
+.buttons {
+    @include flex-column;
+    align-items: stretch;
+    gap: map-get($gutters, "sm");
+}
