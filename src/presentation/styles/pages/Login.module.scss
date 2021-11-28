@@ -1,0 +1,61 @@
+@import "../index.module";
+
+.outerBox {
+    @include flex-column;
+    @include flex-center;
+    background-image: url("/login-bg-setup.jpeg");
+    background-position: center center;
+    background-size: cover;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+
+    &:after {
+        content: "";
+        position: absolute;
+        background-blend-mode: difference;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        backdrop-filter: grayscale(2) brightness(33%);
+        z-index: -1;
+    }
+}
+
+.box {
+    background: linear-gradient(135deg, #{$silver100}40 30%, #{$gold100}10 70%);
+    backdrop-filter: blur(10px);
+    border: 0;
+    box-shadow: 0 3px 5px 2px #{$goldMain}30;
+    color: white;
+    @include flex-column;
+    gap: map-get($gutters, "md");
+    padding: map-get($gutters, "xl");
+    border-radius: map-get($radii, "xs");
+
+    > header {
+        text-align: center;
+    }
+}
+
+.form {
+    @include flex-column;
+    margin: map-get($gutters, "lg");
+    gap: map-get($gutters, "xxl");
+
+    .bottomForm {
+        @include flex-row;
+        gap: map-get($gutters, "xxl");
+
+        a {
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: border-bottom-color 200ms;
+
+            &:hover {
+                border-color: $goldMain;
+            }
+        }
+    }
+}

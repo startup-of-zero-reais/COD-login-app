@@ -1,9 +1,15 @@
+@import "index.module";
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  font-family: $poppins, $montserrat, $redHatDisplay, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  min-width: 100vw;
+  min-height: 100vh;
+  color: white;
 }
 
 a {

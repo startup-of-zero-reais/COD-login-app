@@ -1,0 +1,41 @@
+@use "sass:math";
+
+$gold100: #FFE169;
+$gold200: #FAD643;
+$gold300: #EDC531;
+$gold400: #DBB42C;
+$gold500: #C9A227;
+$gold600: #B69121;
+$gold700: #A47E1B;
+$gold800: #926C15;
+$gold900: #805B10;
+$goldA700: #76520E;
+$goldMain: $gold400;
+
+$silver100: #F8F9FA;
+$silver200: #E9ECEF;
+$silver300: #DEE2E6;
+$silver400: #CED4DA;
+$silver500: #ADB5BD;
+$silver600: #6C757D;
+$silver700: #495057;
+$silver800: #343A40;
+$silver900: #212529;
+$silverMain: $silver500;
+
+$purple100: #E0AAFF;
+$purple200: #C77DFF;
+$purple300: #9D4EDD;
+$purple400: #7B2CBF;
+$purple500: #5A189A;
+$purple600: #3C096C;
+$purple700: #240046;
+$purple800: #10002B;
+$purpleMain: $purple600;
+
+$poppins: "Poppins", sans-serif;
+$montserrat: "Montserrat", sans-serif;
+$redHatDisplay: "Red Hat Display", sans-serif;
+
+$gutters: ("xs": 0.5rem, "sm": 0.625rem, "md": 1rem, "lg": 1.250rem, "xl": 1.5rem, "xxl": 2rem);
+$radii: ("xs": 0.5rem, "sm": 0.625rem, "md": 1rem, "lg": 1.250rem, "xl": 1.5rem, "xxl": 2rem, "full": 50%);
