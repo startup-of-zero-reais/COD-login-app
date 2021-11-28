@@ -27,8 +27,14 @@
     }
 
     & p[class^="MuiFormHelperText-root"] {
-        color: $silver200;
-        margin-top: map-get($gutters, "xs");
+        &:not(&[class*="Mui-error"]) {
+            color: $silver200;
+            margin-top: map-get($gutters, "xs");
+        }
+
+        &[class*="Mui-error"] {
+            color: orange;
+        }
     }
 
     & input {
