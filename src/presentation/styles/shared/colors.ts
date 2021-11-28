@@ -12,7 +12,7 @@ export const purplePalette: PaletteColorOptions = {
 	800: "#10002B",
 }
 export const goldPalette: PaletteColorOptions = {
-	main: "#A47E1B",
+	main: "#DBB42C",
 	100: "#FFE169",
 	200: "#FAD643",
 	300: "#EDC531",

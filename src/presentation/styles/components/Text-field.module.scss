@@ -3,12 +3,14 @@
 .textField {
     transition: color 200ms, border-color 200ms;
 
+    background: linear-gradient(90deg, #{$gold400}20 30%, #{$purple600}20 90%);
+
     & div[class^="MuiOutlinedInput"] {
-        border-color: #{$goldMain};
+        border-color: #{$gold400};
 
         &:focus-within {
             & div[class^="MuiInputAdornment"] {
-                color: $goldMain;
+                color: $gold400;
             }
         }
 
@@ -21,7 +23,7 @@
         }
 
         &:hover:not(&:active) fieldset[class$="notchedOutline"] {
-            border-color: $goldMain;
+            border-color: $gold400;
         }
     }
 
