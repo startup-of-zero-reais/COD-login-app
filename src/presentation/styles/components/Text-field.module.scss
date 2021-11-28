@@ -1,0 +1,31 @@
+@import "../index.module";
+
+.textField {
+    transition: color 200ms, border-color 200ms;
+
+    & div[class^="MuiOutlinedInput"] {
+        border-color: #{$goldMain};
+
+        &:focus-within {
+            & div[class^="MuiInputAdornment"] {
+                color: $goldMain;
+            }
+        }
+
+        & div[class^="MuiInputAdornment"] {
+            color: white;
+        }
+
+        & fieldset {
+            border-color: white;
+        }
+
+        &:hover:not(&:active) fieldset[class$="notchedOutline"] {
+            border-color: $goldMain;
+        }
+    }
+
+    & input {
+        color: white;
+    }
+}
