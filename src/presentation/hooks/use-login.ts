@@ -3,10 +3,12 @@ import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 import { useStorage } from "@/presentation/hooks/use-storage";
 import { ValidatorBuilder, ValidatorComposite } from "@/validators";
+import { localApi } from "@/data/apis";
 
 type Errors = {
 	email: string[];
 	password: string[];
+	form: string[];
 }
 
 export function useLoginPage() {
@@ -14,8 +16,7 @@ export function useLoginPage() {
 	const [ email, setEmail ] = useState('')
 	const [ password, setPassword ] = useState('')
 	const [ isDisabled, setIsDisabled ] = useState(true)
-
-	const [ errors, setErrors ] = useState<Errors>({ email: [], password: [] })
+	const [ errors, setErrors ] = useState<Errors>({ email: [], password: [], form: [] })
 
 	const [ shouldRemember, setShouldRemember ] = useStorage("still-connected", false)
 
@@ -23,12 +24,14 @@ export function useLoginPage() {
 		setPasswordVisible(prevState => !prevState)
 	}, [])
 
-	const onChangeEmail = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
-		setEmail(e.target.value)
-	}, [])
+	const onChange = useCallback(( key: "email" | "password" ) => ( e: ChangeEvent<HTMLInputElement> ) => {
+		if (key === "email") {
+			setEmail(e.target.value)
+		}
 
-	const onChangePassword = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
-		setPassword(e.target.value)
+		if (key === "password") {
+			setPassword(e.target.value)
+		}
 	}, [])
 
 	const getErrorText = useCallback(( errors: string[] ) => {
@@ -47,7 +50,7 @@ export function useLoginPage() {
 		buttons: classNames(styles.buttons),
 	}), [])
 
-	const onSubmit = useCallback(( e: FormEvent ) => {
+	const onSubmit = useCallback(async ( e: FormEvent ) => {
 		e.preventDefault()
 
 		const emailErrors = ValidatorComposite.build(
@@ -55,12 +58,13 @@ export function useLoginPage() {
 		).validate("E-mail", email)
 
 		const passwordErrors = ValidatorComposite.build(
-			ValidatorBuilder.field("Senha").required().minLength(8).build()
+			ValidatorBuilder.field("Senha").required().minLength(6).build()
 		).validate("Senha", password)
 
 		setErrors({
 			email: emailErrors,
-			password: passwordErrors
+			password: passwordErrors,
+			form: []
 		})
 
 		if (emailErrors.length > 0 || passwordErrors.length > 0) {
@@ -68,7 +72,19 @@ export function useLoginPage() {
 			return;
 		}
 
-		console.log(email, password)
+		const [ response, err ] = await localApi.post("/login", { email, password })
+			.then(( { data } ) => [ data, null ])
+			.catch(err => [ err.message, err.response.data.message ])
+
+		if (err) {
+			setErrors(prevState => ({
+				...prevState,
+				form: [ err ]
+			}))
+			return;
+		}
+
+		console.log(response)
 	}, [ email, password ]);
 
 	useEffect(() => {
@@ -86,8 +102,8 @@ export function useLoginPage() {
 		shouldRemember,
 		setShouldRemember,
 		onSubmit,
-		onChangeEmail,
-		onChangePassword,
+		onChangeEmail: onChange("email"),
+		onChangePassword: onChange("password"),
 		isDisabled,
 		errors,
 		getErrorText
