@@ -8,11 +8,12 @@ import {
     IconButton,
     InputAdornment,
     Link as MuiLink,
-    Switch
+    Switch,
+    Typography
 } from "@mui/material";
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import { TextField } from "@/presentation/components/shared";
-import { ToggleRender } from "@/presentation/utils";
+import { RenderIf, ToggleRender } from "@/presentation/utils";
 import { useLoginPage } from "@/presentation/hooks";
 
 type LoginProps = {}
@@ -45,6 +46,15 @@ const Login: NextPage<LoginProps> = () => {
             <Grow in={ true }>
                 <div className={ boxStyles }>
                     <header>&lt;Code Craft Club&gt;</header>
+
+                    { RenderIf(
+                        errors.form.length > 0,
+                        (
+                            <Typography variant={ "h5" } color={ "error" } textAlign={ "center" }>
+                                Oops! { errors.form[0] }
+                            </Typography>
+                        )
+                    ) }
 
                     <Box
                         component={ "form" }
