@@ -47,33 +47,37 @@ const Login: NextPage<LoginProps> = () => {
                     <header>&lt;Code Craft Club&gt;</header>
 
                     <Box className={ formStyles }>
-                        <TextField label={ "E-mail" }
-                                   placeholder={ "john.doe@email.com" }
-                                   InputProps={ {
-                                       startAdornment: (
-                                           <InputAdornment position={ "start" }>
-                                               <FiMail/>
-                                           </InputAdornment>
-                                       )
-                                   } }/>
-                        <TextField label={ "Senha" } InputProps={ {
-                            startAdornment: (
-                                <InputAdornment position={ "start" }>
-                                    <FiLock/>
-                                </InputAdornment>
-                            ),
-                            endAdornment: (
-                                <InputAdornment position={ "end" }>
-                                    <IconButton color={ "primary" } onClick={ togglePasswordVisibility }>
-                                        { ToggleRender(!isPasswordVisible,
-                                            (<FiEye color={ "white" } size={ 18 }/>),
-                                            (<FiEyeOff color={ "white" } size={ 18 }/>)
-                                        ) }
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                            type: isPasswordVisible ? "text" : "password"
-                        } }/>
+                        <TextField
+                            label={ "E-mail" }
+                            placeholder={ "john.doe@email.com" }
+                            InputProps={ {
+                                startAdornment: (
+                                    <InputAdornment position={ "start" }>
+                                        <FiMail/>
+                                    </InputAdornment>
+                                )
+                            } }/>
+                        <TextField
+                            label={ "Senha" }
+                            placeholder={ "Sua_senha@ultra#!secreta123" }
+                            InputProps={ {
+                                startAdornment: (
+                                    <InputAdornment position={ "start" }>
+                                        <FiLock/>
+                                    </InputAdornment>
+                                ),
+                                endAdornment: (
+                                    <InputAdornment position={ "end" }>
+                                        <IconButton color={ "primary" } onClick={ togglePasswordVisibility }>
+                                            { ToggleRender(!isPasswordVisible,
+                                                (<FiEye color={ "white" } size={ 18 }/>),
+                                                (<FiEyeOff color={ "white" } size={ 18 }/>)
+                                            ) }
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                                type: isPasswordVisible ? "text" : "password"
+                            } }/>
 
                         <div className={ bottomForm }>
                             <Link passHref href={ "/esqueci-minha-senha" }>

@@ -36,13 +36,17 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
                     </Typography>
 
                     <Box>
-                        <TextField fullWidth label={ "E-mail" } InputProps={ {
-                            startAdornment: (
-                                <InputAdornment position={ "start" }>
-                                    <FiMail/>
-                                </InputAdornment>
-                            )
-                        } }/>
+                        <TextField
+                            fullWidth
+                            label={ "E-mail" }
+                            placeholder={ "john.doe@email.com" }
+                            InputProps={ {
+                                startAdornment: (
+                                    <InputAdornment position={ "start" }>
+                                        <FiMail/>
+                                    </InputAdornment>
+                                )
+                            } }/>
                     </Box>
 
                     <Box className={ buttons }>
