@@ -55,7 +55,7 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
                         </Button>
 
                         <Link href={ "/login" } passHref>
-                            <Button color={ "secondary" } variant={ "contained" } fullWidth size={ "large" }>
+                            <Button color={ "warning" } variant={ "outlined" } fullWidth size={ "large" }>
                                 Voltar
                             </Button>
                         </Link>
