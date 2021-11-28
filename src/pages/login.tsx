@@ -45,13 +45,15 @@ const Login: NextPage<LoginProps> = () => {
                     <header>&lt;Code Craft Club&gt;</header>
 
                     <Box className={ formStyles }>
-                        <TextField label={ "E-mail" } InputProps={ {
-                            startAdornment: (
-                                <InputAdornment position={ "start" }>
-                                    <FiMail/>
-                                </InputAdornment>
-                            )
-                        } }/>
+                        <TextField label={ "E-mail" }
+                                   placeholder={ "john.doe@email.com" }
+                                   InputProps={ {
+                                       startAdornment: (
+                                           <InputAdornment position={ "start" }>
+                                               <FiMail/>
+                                           </InputAdornment>
+                                       )
+                                   } }/>
                         <TextField label={ "Senha" } InputProps={ {
                             startAdornment: (
                                 <InputAdornment position={ "start" }>
