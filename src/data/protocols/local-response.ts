@@ -1,0 +1,1 @@
+export type LocalResponse<T> = T | { message: string }
