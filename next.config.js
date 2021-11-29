@@ -10,23 +10,6 @@ module.exports = {
             path.join(__dirname, 'src', 'presentation', 'styles', 'shared'),
         ],
     },
-    async redirects() {
-        return [
-            {
-                source: "/",
-                destination: "/login",
-                permanent: true,
-            }
-        ]
-    },
-    async rewrites() {
-        return [
-            {
-                source: "/",
-                destination: "/login",
-            }
-        ]
-    },
     env: {
         USERS_API_BASE: process.env.USERS_API_BASE,
         LOCAL_API_BASE: process.env.LOCAL_API_BASE,

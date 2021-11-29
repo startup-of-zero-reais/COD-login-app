@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Box, Button, Grow, InputAdornment, Typography } from "@mui/material";
 import { FiMail } from "react-icons/fi";
 import classNames from "classnames";
-import { TextField } from "@/presentation/components/shared";
+import { Heading, TextField } from "@/presentation/components/shared";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 
 type ForgotPasswordProps = {}
@@ -22,6 +22,8 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
 
     return (
         <div className={ outerBox }>
+            <Heading title={ "Esqueci minha senha | Code Craft Club" }/>
+
             <Grow in={ true }>
                 <div className={ boxStyles }>
                     <header>&lt;Code Craft Club&gt;</header>
@@ -54,7 +56,7 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
                             Enviar
                         </Button>
 
-                        <Link href={ "/login" } passHref>
+                        <Link href={ "/" } passHref>
                             <Button color={ "warning" } variant={ "outlined" } fullWidth size={ "large" }>
                                 Voltar
                             </Button>

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss"
 import { Box, Button, Grow, IconButton, InputAdornment, Link as MuiLink } from "@mui/material";
-import { TextField } from "@/presentation/components/shared";
+import { Heading, TextField } from "@/presentation/components/shared";
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import Link from "next/link";
 import { ToggleRender } from "@/presentation/utils";
@@ -28,6 +28,8 @@ const Register = () => {
 
     return (
         <div className={ outerBox }>
+            <Heading title={ "Registrar-se | Code Craft Club" }/>
+
             <Grow in={ true }>
                 <div className={ boxStyles }>
                     <header>&lt;Code Craft Club&gt;</header>
@@ -107,7 +109,7 @@ const Register = () => {
                                 Cadastrar
                             </Button>
 
-                            <Link passHref href={ "/login" }>
+                            <Link passHref href={ "/" }>
                                 <MuiLink textAlign={ "center" } underline={ "none" }>Já possui conta ? Acesse</MuiLink>
                             </Link>
                         </div>
