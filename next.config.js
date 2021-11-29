@@ -26,5 +26,11 @@ module.exports = {
                 destination: "/login",
             }
         ]
+    },
+    env: {
+        USERS_API_BASE: process.env.USERS_API_BASE,
+        LOCAL_API_BASE: process.env.LOCAL_API_BASE,
+        X_API_KEY: process.env.X_API_KEY,
+        APPLICATION: process.env.APPLICATION,
     }
 }
