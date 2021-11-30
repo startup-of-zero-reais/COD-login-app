@@ -1,22 +1,7 @@
-import { AxiosError } from "axios";
 import { ErrorProtocol, FinalResponse } from "@/data/protocols/error-protocol";
+import { BaseErrorHandler } from "@/data/errors/base-error-handler";
 
-export class LoginErrors implements ErrorProtocol {
-	private err: AxiosError = {} as any;
-
-	setErr( err: AxiosError ): ErrorProtocol {
-		this.err = err
-		return this
-	}
-
-	getStatus(): number {
-		return this.err.response?.status || 500
-	}
-
-	getMessage(): string {
-		return this.err.response?.data.message || "Não autorizado"
-	}
-
+export class LoginErrors extends BaseErrorHandler implements ErrorProtocol {
 	translateMessage(): string {
 		switch (this.getMessage()) {
 			case "Unauthorized":
