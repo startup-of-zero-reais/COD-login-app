@@ -1,31 +1,28 @@
-import { useMemo } from "react";
 import { NextPage } from "next";
 import Link from "next/link"
 import { Box, Button, Grow, InputAdornment, Typography } from "@mui/material";
 import { FiMail } from "react-icons/fi";
-import classNames from "classnames";
 import { Heading, TextField } from "@/presentation/components/shared";
-import styles from "@/presentation/styles/pages/Login.module.scss";
+import { useRecoverAccount } from "@/presentation/hooks/use-recover-account";
+import { RenderIf } from "@/presentation/utils";
 
 type ForgotPasswordProps = {}
 
 const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
+    const { recoverStyles, onChangeEmail, errors, onSubmit, getErrorText } = useRecoverAccount()
+
     const {
         boxStyles,
         outerBox,
         buttons
-    } = useMemo(() => ({
-        boxStyles: classNames(styles.box),
-        outerBox: classNames(styles.outerBox),
-        buttons: classNames(styles.buttons)
-    }), [])
+    } = recoverStyles
 
     return (
         <div className={ outerBox }>
             <Heading title={ "Esqueci minha senha | Code Craft Club" }/>
 
             <Grow in={ true }>
-                <div className={ boxStyles }>
+                <form className={ boxStyles } onSubmit={ onSubmit }>
                     <header>&lt;Code Craft Club&gt;</header>
 
                     <Typography variant={ "h5" } color={ "gold" } textAlign={ "center" } fontWeight={ "500" }>
@@ -37,22 +34,32 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
                         Qual o e-mail do seu cadastro ?
                     </Typography>
 
+                    { RenderIf(errors.formErrors.length > 0, (
+                        <Typography variant={ "h6" } color={ "error" } textAlign={ "center" } fontWeight={ "500" }>
+                            { errors.formErrors[0] }
+                        </Typography>
+                    )) }
+
                     <Box>
                         <TextField
                             fullWidth
                             label={ "E-mail" }
                             placeholder={ "john.doe@email.com" }
+                            onChange={ onChangeEmail }
                             InputProps={ {
                                 startAdornment: (
                                     <InputAdornment position={ "start" }>
                                         <FiMail/>
                                     </InputAdornment>
                                 )
-                            } }/>
+                            } }
+                            error={ !!errors.emailErrors.length }
+                            helperText={ getErrorText(errors.emailErrors) }
+                        />
                     </Box>
 
                     <Box className={ buttons }>
-                        <Button variant={ "contained" } fullWidth size={ "large" }>
+                        <Button variant={ "contained" } fullWidth size={ "large" } type={ "submit" }>
                             Enviar
                         </Button>
 
@@ -62,7 +69,7 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
                             </Button>
                         </Link>
                     </Box>
-                </div>
+                </form>
             </Grow>
         </div>
     )
