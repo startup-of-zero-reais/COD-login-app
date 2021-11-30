@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { localApi, usersApi } from "@/data/apis";
 import { LocalResponse } from "@/data/protocols/local-response";
-import { LoginErrors } from "@/data/errors/login-error";
 import { ApiHandler } from "@/data/protocols/api-handler";
 import { HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
 import { ValidatorBuilder, ValidatorComposite } from "@/validators";
+import { ErrorProtocol } from "@/data/protocols/error-protocol";
 
 type LoginBody = {
 	email: string;
@@ -62,20 +62,23 @@ export class LocalLoginRequest implements LocalHandler {
 }
 
 export class ApiLoginRequest implements ApiHandler {
+	constructor( private err: ErrorProtocol ) {
+	}
+
 	public async handle<T = LoginResponse>( req: NextApiRequest, res: NextApiResponse<LocalResponse<T>> ) {
 		const { email, password } = req.body
 
 		try {
-			const { data: response } = await usersApi.post<T>("/auth", JSON.stringify({
+			const { data: response } = await usersApi.post<T>("/auth", {
 				email,
 				password
-			}))
+			})
 
 			return res.status(200).json(response)
 		} catch (e) {
-			const err = new LoginErrors(e as any);
-
-			const { statusCode, message } = err.getFinalResponse()
+			const { statusCode, message } = this.err
+				.setErr(e)
+				.getFinalResponse()
 
 			return res.status(statusCode).json({
 				message

@@ -1,7 +1,12 @@
 import { AxiosError } from "axios";
+import { ErrorProtocol, FinalResponse } from "@/data/protocols/error-protocol";
 
-export class LoginErrors {
-	constructor( private readonly err: AxiosError ) {
+export class LoginErrors implements ErrorProtocol {
+	private err: AxiosError = {} as any;
+
+	setErr( err: AxiosError ): ErrorProtocol {
+		this.err = err
+		return this
 	}
 
 	getStatus(): number {
@@ -20,7 +25,7 @@ export class LoginErrors {
 		}
 	}
 
-	getFinalResponse(): { statusCode: number; message: string } {
+	getFinalResponse(): FinalResponse {
 		return {
 			statusCode: this.getStatus(),
 			message: this.translateMessage()

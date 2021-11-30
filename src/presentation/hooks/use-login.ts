@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useState } fro
 import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 import { useStorage } from "@/presentation/hooks/use-storage";
-import { LocalLoginRequest } from "@/data/usecases/login-request";
+import { makeLocalLoginRequest } from "@/data/factories/login-factory";
 
 type Errors = {
 	email: string[];
@@ -54,7 +54,7 @@ export function useLoginPage() {
 	const onSubmit = useCallback(async ( e: FormEvent ) => {
 		e.preventDefault()
 
-		const loginHandler = new LocalLoginRequest()
+		const loginHandler = makeLocalLoginRequest()
 
 		const errors = loginHandler.validate({ email, password })
 
