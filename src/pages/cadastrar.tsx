@@ -1,37 +1,38 @@
-import { useCallback, useMemo, useState } from "react";
-import classNames from "classnames";
-import styles from "@/presentation/styles/pages/Login.module.scss"
-import { Box, Button, Grow, IconButton, InputAdornment, Link as MuiLink } from "@mui/material";
+import { Box, Button, Grow, IconButton, InputAdornment, Link as MuiLink, Typography } from "@mui/material";
 import { Heading, TextField } from "@/presentation/components/shared";
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import Link from "next/link";
-import { ToggleRender } from "@/presentation/utils";
+import { RenderIf, ToggleRender } from "@/presentation/utils";
+import { useCreateAccount, usePasswordToggle } from "@/presentation/hooks";
 
 const Register = () => {
-    const [ isPasswordVisible, setPasswordVisible ] = useState(false);
+    const {
+        createAccountStyles,
+        onChangeName,
+        onChangeLastname,
+        onChangeEmail,
+        onChangePassword,
+        onChangeConfirmPassword,
+        onSubmit,
+        errors,
+        getError
+    } = useCreateAccount()
 
-    const togglePasswordVisibility = useCallback(() => {
-        setPasswordVisible(prevState => !prevState)
-    }, [])
+    const { togglePasswordVisibility, isPasswordVisible } = usePasswordToggle()
 
     const {
         boxStyles,
         outerBox,
         formStyles,
         buttons
-    } = useMemo(() => ({
-        boxStyles: classNames(styles.box),
-        outerBox: classNames(styles.outerBox),
-        formStyles: classNames(styles.form),
-        buttons: classNames(styles.buttons),
-    }), [])
+    } = createAccountStyles
 
     return (
         <div className={ outerBox }>
             <Heading title={ "Registrar-se | Code Craft Club" }/>
 
             <Grow in={ true }>
-                <div className={ boxStyles }>
+                <form className={ boxStyles } onSubmit={ onSubmit }>
                     <header>&lt;Code Craft Club&gt;</header>
 
                     <Box className={ formStyles }>
@@ -39,16 +40,28 @@ const Register = () => {
                             <TextField
                                 placeholder={ "John" }
                                 label={ "Nome" }
+                                onChange={ onChangeName }
+                                required
+                                error={ !!getError(errors.nameErrors) }
+                                helperText={ getError(errors.nameErrors) }
                             />
                             <TextField
                                 placeholder={ "Doe" }
                                 label={ "Sobrenome" }
+                                onChange={ onChangeLastname }
+                                required
+                                error={ !!getError(errors.lastnameErrors) }
+                                helperText={ getError(errors.lastnameErrors) }
                             />
                         </Box>
 
                         <TextField
                             label={ "E-mail" }
                             placeholder={ "john.doe@email.com" }
+                            onChange={ onChangeEmail }
+                            required
+                            error={ !!getError(errors.emailErrors) }
+                            helperText={ getError(errors.emailErrors) }
                             InputProps={ {
                                 startAdornment: (
                                     <InputAdornment position={ "start" }>
@@ -60,6 +73,10 @@ const Register = () => {
                         <TextField
                             label={ "Senha" }
                             placeholder={ "Sua_senha@ultra#!secreta123" }
+                            onChange={ onChangePassword }
+                            required
+                            error={ !!getError(errors.passwordErrors) }
+                            helperText={ getError(errors.passwordErrors) }
                             InputProps={ {
                                 startAdornment: (
                                     <InputAdornment position={ "start" }>
@@ -83,6 +100,8 @@ const Register = () => {
                         <TextField
                             label={ "Confirmação de senha" }
                             placeholder={ "Sua_senha@ultra#!secreta123" }
+                            onChange={ onChangeConfirmPassword }
+                            required
                             InputProps={ {
                                 startAdornment: (
                                     <InputAdornment position={ "start" }>
@@ -101,11 +120,18 @@ const Register = () => {
                                 ),
                                 type: isPasswordVisible ? "text" : "password"
                             } }
-                            helperText={ "Digite novamente sua senha. Para garantir que não há erros de digitação" }
+                            error={ !!getError(errors.new_passwordErrors) }
+                            helperText={ getError(errors.new_passwordErrors) ? getError(errors.new_passwordErrors) : "Digite novamente sua senha. Para garantir que não há erros de digitação" }
                         />
 
+                        { RenderIf(!!getError(errors.formErrors), (
+                            <Typography color={ "error" } textAlign={ "center" }>
+                                { getError(errors.formErrors) }
+                            </Typography>
+                        )) }
+
                         <div className={ buttons }>
-                            <Button variant={ "contained" } fullWidth size={ "large" }>
+                            <Button variant={ "contained" } fullWidth size={ "large" } type={ "submit" }>
                                 Cadastrar
                             </Button>
 
@@ -114,7 +140,7 @@ const Register = () => {
                             </Link>
                         </div>
                     </Box>
-                </div>
+                </form>
             </Grow>
         </div>
     )
