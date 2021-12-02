@@ -14,15 +14,15 @@ import {
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import { Heading, TextField } from "@/presentation/components/shared";
 import { RenderIf, ToggleRender } from "@/presentation/utils";
-import { useLoginPage } from "@/presentation/hooks";
+import { useLoginPage, usePasswordToggle } from "@/presentation/hooks";
 
 type LoginProps = {}
 
 const Index: NextPage<LoginProps> = () => {
+    const { isPasswordVisible, togglePasswordVisibility } = usePasswordToggle()
+
     const {
         loginStyles,
-        isPasswordVisible,
-        togglePasswordVisibility,
         shouldRemember,
         setShouldRemember,
         onSubmit,

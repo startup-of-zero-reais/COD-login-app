@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Box, Button, Grow, InputAdornment, Typography } from "@mui/material";
 import { FiMail } from "react-icons/fi";
 import { Heading, TextField } from "@/presentation/components/shared";
-import { useRecoverAccount } from "@/presentation/hooks/use-recover-account";
+import { useRecoverAccount } from "@/presentation/hooks";
 import { RenderIf } from "@/presentation/utils";
 
 type ForgotPasswordProps = {}
