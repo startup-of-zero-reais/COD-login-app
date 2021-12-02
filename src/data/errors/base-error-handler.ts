@@ -14,7 +14,7 @@ export class BaseErrorHandler implements ErrorProtocol {
 	}
 
 	getMessage(): string {
-		return this.err.response?.data.message || "Não autorizado"
+		return this.err.response?.data.message || this.err.message || "Não autorizado"
 	}
 
 	getFinalResponse(): FinalResponse {
