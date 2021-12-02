@@ -1,7 +1,7 @@
-import { Box, Button, Grow, IconButton, InputAdornment, Link as MuiLink, Typography } from "@mui/material";
-import { Heading, TextField } from "@/presentation/components/shared";
-import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import Link from "next/link";
+import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
+import { Box, Grow, IconButton, InputAdornment, Link as MuiLink, Typography } from "@mui/material";
+import { Button, Heading, TextField } from "@/presentation/components/shared";
 import { RenderIf, ToggleRender } from "@/presentation/utils";
 import { useCreateAccount, usePasswordToggle } from "@/presentation/hooks";
 
@@ -15,7 +15,8 @@ const Register = () => {
         onChangeConfirmPassword,
         onSubmit,
         errors,
-        getError
+        getError,
+        isLoading
     } = useCreateAccount()
 
     const { togglePasswordVisibility, isPasswordVisible } = usePasswordToggle()
@@ -131,7 +132,14 @@ const Register = () => {
                         )) }
 
                         <div className={ buttons }>
-                            <Button variant={ "contained" } fullWidth size={ "large" } type={ "submit" }>
+                            <Button
+                                variant={ "contained" }
+                                fullWidth
+                                size={ "large" }
+                                type={ "submit" }
+                                loading={ isLoading }
+                                disabled={ isLoading }
+                            >
                                 Cadastrar
                             </Button>
 

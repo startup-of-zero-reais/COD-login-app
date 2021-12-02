@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useCallback, useMemo, useReducer, useState } fr
 import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 import { makeLocalCreateAccount } from "@/data/factories/create-account-factory";
-import { useErrorPolyfill } from "@/presentation/hooks";
+import { useErrorPolyfill, useLoading } from "@/presentation/hooks";
 
 type CreateAccountStates = {
 	name: string;
@@ -49,6 +49,7 @@ export function useCreateAccount() {
 	const [ state, dispatch ] = useReducer(createAccountReducer, initialState)
 	const { polyfill } = useErrorPolyfill()
 	const [ errors, setErrors ] = useState(errorsInitialState)
+	const { isLoading, startLoading, endLoading } = useLoading()
 
 	const onChange = useCallback(( field: Actions['type'] ) => {
 		return ( e: ChangeEvent<HTMLInputElement> ) => {
@@ -67,6 +68,7 @@ export function useCreateAccount() {
 
 	const onSubmit = useCallback(async ( e: FormEvent ) => {
 		e.preventDefault()
+		startLoading()
 
 		const body = {
 			name: state.name,
@@ -81,6 +83,7 @@ export function useCreateAccount() {
 
 		if (validationErrors) {
 			setErrors(validationErrors)
+			endLoading()
 			return;
 		}
 
@@ -90,11 +93,13 @@ export function useCreateAccount() {
 
 		const hasNotError = polyfill(err, setErrors)
 		if (!hasNotError) {
+			endLoading()
 			return;
 		}
 
 		console.log(response)
-	}, [ state, polyfill ])
+		endLoading()
+	}, [ state, polyfill, startLoading, endLoading ])
 
 	return {
 		createAccountStyles,
@@ -106,7 +111,8 @@ export function useCreateAccount() {
 		onChangeConfirmPassword: onChange('change-confirmPassword'),
 		onSubmit,
 		errors,
-		getError
+		getError,
+		isLoading
 	}
 }
 
