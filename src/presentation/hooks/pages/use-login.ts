@@ -3,6 +3,7 @@ import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 import { useStorage } from "@/presentation/hooks/pages/use-storage";
 import { makeLocalLoginRequest } from "@/data/factories/login-factory";
+import { useLoading } from "@/presentation/hooks";
 
 type Errors = {
 	email: string[];
@@ -17,6 +18,8 @@ export function useLoginPage() {
 	const [ password, setPassword ] = useState('')
 	const [ isDisabled, setIsDisabled ] = useState(true)
 	const [ errors, setErrors ] = useState<Errors>(errorsInitialState)
+
+	const { isLoading, startLoading, endLoading } = useLoading()
 
 	const [ shouldRemember, setShouldRemember ] = useStorage("still-connected", false)
 
@@ -48,6 +51,7 @@ export function useLoginPage() {
 
 	const onSubmit = useCallback(async ( e: FormEvent ) => {
 		e.preventDefault()
+		startLoading()
 
 		const loginHandler = makeLocalLoginRequest()
 
@@ -62,12 +66,13 @@ export function useLoginPage() {
 				form: formErrors
 			})
 
+			endLoading()
 			return;
 		}
 
 		setErrors(errorsInitialState)
 
-		const [ response, err ] = await loginHandler.handle({ email, password })
+		const [ , err ] = await loginHandler.handle({ email, password })
 
 		if (err) {
 			if (typeof err === "string") {
@@ -76,6 +81,7 @@ export function useLoginPage() {
 					form: [ err ]
 				}))
 
+				endLoading()
 				return;
 			}
 
@@ -87,11 +93,12 @@ export function useLoginPage() {
 				}))
 			}
 
+			endLoading()
 			return;
 		}
 
-		console.log(response)
-	}, [ email, password ]);
+		endLoading()
+	}, [ email, password, startLoading, endLoading ]);
 
 	useEffect(() => {
 		if (email && password) {
@@ -110,6 +117,7 @@ export function useLoginPage() {
 		onChangePassword: onChange("password"),
 		isDisabled,
 		errors,
-		getErrorText
+		getErrorText,
+		isLoading
 	}
 }
