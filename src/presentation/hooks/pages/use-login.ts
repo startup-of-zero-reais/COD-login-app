@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
-import { useStorage } from "@/presentation/hooks/use-storage";
+import { useStorage } from "@/presentation/hooks/pages/use-storage";
 import { makeLocalLoginRequest } from "@/data/factories/login-factory";
 
 type Errors = {
@@ -13,17 +13,12 @@ type Errors = {
 const errorsInitialState = { email: [], password: [], form: [] }
 
 export function useLoginPage() {
-	const [ isPasswordVisible, setPasswordVisible ] = useState(false);
 	const [ email, setEmail ] = useState('')
 	const [ password, setPassword ] = useState('')
 	const [ isDisabled, setIsDisabled ] = useState(true)
 	const [ errors, setErrors ] = useState<Errors>(errorsInitialState)
 
 	const [ shouldRemember, setShouldRemember ] = useStorage("still-connected", false)
-
-	const togglePasswordVisibility = useCallback(() => {
-		setPasswordVisible(prevState => !prevState)
-	}, [])
 
 	const onChange = useCallback(( key: "email" | "password" ) => ( e: ChangeEvent<HTMLInputElement> ) => {
 		if (key === "email") {
@@ -107,8 +102,6 @@ export function useLoginPage() {
 	}, [ email, password ])
 
 	return {
-		isPasswordVisible,
-		togglePasswordVisibility,
 		loginStyles,
 		shouldRemember,
 		setShouldRemember,
