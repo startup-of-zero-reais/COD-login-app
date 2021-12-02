@@ -2,7 +2,6 @@ import { NextPage } from "next";
 import Link from "next/link"
 import {
     Box,
-    Button,
     FormControlLabel,
     Grow,
     IconButton,
@@ -12,7 +11,7 @@ import {
     Typography
 } from "@mui/material";
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
-import { Heading, TextField } from "@/presentation/components/shared";
+import { Button, Heading, TextField } from "@/presentation/components/shared";
 import { RenderIf, ToggleRender } from "@/presentation/utils";
 import { useLoginPage, usePasswordToggle } from "@/presentation/hooks";
 
@@ -30,7 +29,8 @@ const Index: NextPage<LoginProps> = () => {
         onChangePassword,
         isDisabled,
         errors,
-        getErrorText
+        getErrorText,
+        isLoading
     } = useLoginPage()
 
     const {
@@ -133,7 +133,8 @@ const Index: NextPage<LoginProps> = () => {
                                     variant={ "contained" }
                                     fullWidth
                                     size={ "large" }
-                                    disabled={ isDisabled }
+                                    disabled={ isDisabled || isLoading }
+                                    loading={ isLoading }
                                 >
                                     Acessar
                                 </Button>
