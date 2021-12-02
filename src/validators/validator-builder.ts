@@ -1,6 +1,7 @@
 import { EmailValidator } from "@/validators/email-validator";
 import { FieldValidator } from "@/validators/validation-protocol";
 import { MinLengthValidator } from "@/validators/min-length-validator";
+import { SameAsValidator } from "@/validators/same-as-validator";
 
 export class ValidatorBuilder {
 	constructor(
@@ -27,6 +28,12 @@ export class ValidatorBuilder {
 
 	minLength( length: number ) {
 		const validator = new MinLengthValidator(this.key, length)
+		this.validators.push(validator)
+		return this
+	}
+
+	sameAs( key: string, value: any ) {
+		const validator = new SameAsValidator(this.key, value, key)
 		this.validators.push(validator)
 		return this
 	}
