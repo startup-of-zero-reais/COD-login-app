@@ -72,7 +72,7 @@ export function useLoginPage() {
 
 		setErrors(errorsInitialState)
 
-		const [ response, err ] = await loginHandler.handle({ email, password })
+		const [ , err ] = await loginHandler.handle({ email, password })
 
 		if (err) {
 			if (typeof err === "string") {
@@ -97,7 +97,6 @@ export function useLoginPage() {
 			return;
 		}
 
-		console.log(response)
 		endLoading()
 	}, [ email, password, startLoading, endLoading ]);
 

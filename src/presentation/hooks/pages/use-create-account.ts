@@ -3,6 +3,7 @@ import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 import { makeLocalCreateAccount } from "@/data/factories/create-account-factory";
 import { useErrorPolyfill, useLoading } from "@/presentation/hooks";
+import { useRouter } from "next/router";
 
 type CreateAccountStates = {
 	name: string;
@@ -45,6 +46,8 @@ export function useCreateAccount() {
 		formStyles: classNames(styles.form),
 		buttons: classNames(styles.buttons),
 	}), [])
+
+	const { replace } = useRouter()
 
 	const [ state, dispatch ] = useReducer(createAccountReducer, initialState)
 	const { polyfill } = useErrorPolyfill()
@@ -89,7 +92,7 @@ export function useCreateAccount() {
 
 		setErrors(errorsInitialState)
 
-		const [ response, err ] = await createHandler.handle(body)
+		const [ , err ] = await createHandler.handle(body)
 
 		const hasNotError = polyfill(err, setErrors)
 		if (!hasNotError) {
@@ -97,9 +100,9 @@ export function useCreateAccount() {
 			return;
 		}
 
-		console.log(response)
 		endLoading()
-	}, [ state, polyfill, startLoading, endLoading ])
+		await replace("/conta-criada")
+	}, [ state, polyfill, startLoading, endLoading, replace ])
 
 	return {
 		createAccountStyles,

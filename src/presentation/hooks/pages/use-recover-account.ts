@@ -3,6 +3,7 @@ import { makeLocalRecoverAccount } from "@/data/factories/recover-account-factor
 import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 import { useLoading } from "@/presentation/hooks";
+import { useRouter } from "next/router";
 
 type Errors = {
 	emailErrors: string[];
@@ -21,6 +22,7 @@ export function useRecoverAccount() {
 	const [ email, setEmail ] = useState('')
 	const [ errors, setErrors ] = useState(errorsInitialState)
 	const { isLoading, startLoading, endLoading } = useLoading()
+	const { replace } = useRouter()
 
 	const onChange = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
 		setEmail(e.target.value)
@@ -50,7 +52,7 @@ export function useRecoverAccount() {
 
 		setErrors(errorsInitialState)
 
-		const [ response, err ] = await recoverHandler.handle({ email })
+		const [ , err ] = await recoverHandler.handle({ email })
 
 		if (err) {
 			if (typeof err === "string") {
@@ -75,9 +77,9 @@ export function useRecoverAccount() {
 			return;
 		}
 
-		console.log(response)
 		endLoading()
-	}, [ email, startLoading, endLoading ])
+		await replace("/")
+	}, [ email, startLoading, endLoading, replace ])
 
 	const isDisabled = useMemo(() => (email.length < 3 || !email.match(/@/gi)), [ email ])
 
