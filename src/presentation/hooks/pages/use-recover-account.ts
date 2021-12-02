@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from "react";
 import { makeLocalRecoverAccount } from "@/data/factories/recover-account-factory";
 import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
+import { useLoading } from "@/presentation/hooks";
 
 type Errors = {
 	emailErrors: string[];
@@ -11,14 +12,15 @@ type Errors = {
 const errorsInitialState: Errors = { emailErrors: [], formErrors: [] }
 
 export function useRecoverAccount() {
-	const [ email, setEmail ] = useState('')
-	const [ errors, setErrors ] = useState(errorsInitialState)
-
 	const recoverStyles = useMemo(() => ({
 		boxStyles: classNames(styles.box),
 		outerBox: classNames(styles.outerBox),
 		buttons: classNames(styles.buttons)
 	}), [])
+
+	const [ email, setEmail ] = useState('')
+	const [ errors, setErrors ] = useState(errorsInitialState)
+	const { isLoading, startLoading, endLoading } = useLoading()
 
 	const onChange = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
 		setEmail(e.target.value)
@@ -34,6 +36,7 @@ export function useRecoverAccount() {
 
 	const onSubmit = useCallback(async ( e: FormEvent ) => {
 		e.preventDefault()
+		startLoading()
 
 		const recoverHandler = makeLocalRecoverAccount()
 
@@ -41,6 +44,7 @@ export function useRecoverAccount() {
 
 		if (validationErrors) {
 			setErrors(validationErrors)
+			endLoading()
 			return;
 		}
 
@@ -54,6 +58,7 @@ export function useRecoverAccount() {
 					emailErrors: [],
 					formErrors: [ err ]
 				})
+				endLoading()
 				return;
 			}
 
@@ -66,12 +71,15 @@ export function useRecoverAccount() {
 
 			}
 
+			endLoading()
 			return;
 		}
 
 		console.log(response)
+		endLoading()
+	}, [ email, startLoading, endLoading ])
 
-	}, [ email ])
+	const isDisabled = useMemo(() => (email.length < 3 || !email.match(/@/gi)), [ email ])
 
 	return {
 		recoverStyles,
@@ -79,6 +87,8 @@ export function useRecoverAccount() {
 		onChangeEmail: onChange,
 		onSubmit,
 		errors,
-		getErrorText
+		getErrorText,
+		isLoading,
+		isDisabled
 	}
 }

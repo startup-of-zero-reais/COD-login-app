@@ -1,15 +1,15 @@
 import { NextPage } from "next";
 import Link from "next/link"
-import { Box, Button, Grow, InputAdornment, Typography } from "@mui/material";
+import { Box, Grow, InputAdornment, Typography } from "@mui/material";
 import { FiMail } from "react-icons/fi";
-import { Heading, TextField } from "@/presentation/components/shared";
+import { Button, Heading, TextField } from "@/presentation/components/shared";
 import { useRecoverAccount } from "@/presentation/hooks";
 import { RenderIf } from "@/presentation/utils";
 
 type ForgotPasswordProps = {}
 
 const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
-    const { recoverStyles, onChangeEmail, errors, onSubmit, getErrorText } = useRecoverAccount()
+    const { recoverStyles, onChangeEmail, errors, onSubmit, getErrorText, isLoading, isDisabled } = useRecoverAccount()
 
     const {
         boxStyles,
@@ -46,6 +46,7 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
                             label={ "E-mail" }
                             placeholder={ "john.doe@email.com" }
                             onChange={ onChangeEmail }
+                            required
                             InputProps={ {
                                 startAdornment: (
                                     <InputAdornment position={ "start" }>
@@ -59,7 +60,14 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = () => {
                     </Box>
 
                     <Box className={ buttons }>
-                        <Button variant={ "contained" } fullWidth size={ "large" } type={ "submit" }>
+                        <Button
+                            variant={ "contained" }
+                            fullWidth
+                            size={ "large" }
+                            type={ "submit" }
+                            loading={ isLoading }
+                            disabled={ isDisabled || isLoading }
+                        >
                             Enviar
                         </Button>
 
