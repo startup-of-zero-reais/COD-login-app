@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from "react";
 import { makeLocalRecoverAccount } from "@/data/factories/recover-account-factory";
 import classNames from "classnames";
 import styles from "@/presentation/styles/pages/Login.module.scss";
-import { useLoading } from "@/presentation/hooks";
+import { useErrorPolyfill, useLoading } from "@/presentation/hooks";
 import { useRouter } from "next/router";
 
 type Errors = {
@@ -22,6 +22,7 @@ export function useRecoverAccount() {
 	const [ email, setEmail ] = useState('')
 	const [ errors, setErrors ] = useState(errorsInitialState)
 	const { isLoading, startLoading, endLoading } = useLoading()
+	const { polyfill } = useErrorPolyfill()
 	const { replace } = useRouter()
 
 	const onChange = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
@@ -54,32 +55,16 @@ export function useRecoverAccount() {
 
 		const [ , err ] = await recoverHandler.handle({ email })
 
-		if (err) {
-			if (typeof err === "string") {
-				setErrors({
-					emailErrors: [],
-					formErrors: [ err ]
-				})
-				endLoading()
-				return;
-			}
+		const hasNotErrors = polyfill(err, setErrors)
 
-			if (typeof err === "object") {
-				const { formErrors } = err;
-				setErrors(prevState => ({
-					...prevState,
-					formErrors
-				}))
-
-			}
-
+		if (!hasNotErrors) {
 			endLoading()
 			return;
 		}
 
 		endLoading()
 		await replace("/")
-	}, [ email, startLoading, endLoading, replace ])
+	}, [ email, startLoading, endLoading, polyfill, replace ])
 
 	const isDisabled = useMemo(() => (email.length < 3 || !email.match(/@/gi)), [ email ])
 
