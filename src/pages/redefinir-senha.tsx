@@ -1,7 +1,7 @@
 import { Box, Grow, IconButton, InputAdornment, Typography } from "@mui/material";
 import { Button, Heading, TextField } from "@/presentation/components/shared";
 import { FiEye, FiEyeOff, FiLock } from "react-icons/fi";
-import { RenderIf, ToggleRender } from "@/presentation/utils";
+import { ToggleRender } from "@/presentation/utils";
 import { usePasswordToggle, useRecoverPassword } from "@/presentation/hooks";
 
 const RecoverPassword = () => {
@@ -15,7 +15,7 @@ const RecoverPassword = () => {
         isLoading,
         isDisabled,
         errors,
-        getErrors
+        getErrors,
     } = useRecoverPassword()
 
     const { outerBox, boxStyles, formStyles, buttons } = recoverPasswordStyles
@@ -32,24 +32,6 @@ const RecoverPassword = () => {
                         Certifique-se de escolher uma senha forte e que você lembrará. <br/>
                         Mas não se preocupe, se esquecer outra vez te ajudaremos a recuperar
                     </Typography>
-
-                    { RenderIf(
-                        !!getErrors(errors.tokenErrors),
-                        (
-                            <Typography color={ "error" } variant={ "h4" } textAlign={ "center" }>
-                                { getErrors(errors.tokenErrors) }
-                            </Typography>
-                        )
-                    ) }
-
-                    { RenderIf(
-                        !!getErrors(errors.formErrors),
-                        (
-                            <Typography color={ "error" } variant={ "h4" } textAlign={ "center" }>
-                                { getErrors(errors.formErrors) }
-                            </Typography>
-                        )
-                    ) }
 
                     <Box component={ "form" } onSubmit={ onSubmit } className={ formStyles }>
                         <TextField
