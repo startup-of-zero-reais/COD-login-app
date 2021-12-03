@@ -2,6 +2,8 @@ import { EmailValidator } from "@/validators/email-validator";
 import { FieldValidator } from "@/validators/validation-protocol";
 import { MinLengthValidator } from "@/validators/min-length-validator";
 import { SameAsValidator } from "@/validators/same-as-validator";
+import { RequiredValidator } from "@/validators/required-validator";
+import { UuidValidator } from "@/validators/uuid-validator";
 
 export class ValidatorBuilder {
 	constructor(
@@ -15,14 +17,14 @@ export class ValidatorBuilder {
 	}
 
 	required() {
+		const validator = new RequiredValidator(this.key)
+		this.validators.push(validator)
 		return this;
 	}
 
 	email() {
 		const validator = new EmailValidator(this.key)
-
 		this.validators.push(validator)
-
 		return this
 	}
 
@@ -34,6 +36,12 @@ export class ValidatorBuilder {
 
 	sameAs( key: string, value: any ) {
 		const validator = new SameAsValidator(this.key, value, key)
+		this.validators.push(validator)
+		return this
+	}
+
+	uuid() {
+		const validator = new UuidValidator(this.key)
 		this.validators.push(validator)
 		return this
 	}
