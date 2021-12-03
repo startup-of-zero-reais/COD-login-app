@@ -4,6 +4,7 @@ import styles from "@/presentation/styles/pages/Login.module.scss";
 import { useErrorPolyfill, useLoading } from "@/presentation/hooks";
 import { makeLocalRecoverPassword } from "@/data/factories/recover-password-factory";
 import { useRouter } from "next/router";
+import { useSnackbarContext } from "@/presentation/contexts/snackbar-stack";
 
 type Errors = {
 	new_passwordErrors: string[]
@@ -27,11 +28,12 @@ export function useRecoverPassword() {
 		buttons: classNames(styles.buttons)
 	}), [])
 
-	const { query } = useRouter()
+	const { query, push } = useRouter()
 	const { token = '' } = query as { token?: string }
 
 	const { isLoading, startLoading, endLoading } = useLoading()
 	const { polyfill } = useErrorPolyfill()
+	const { openSnackbar } = useSnackbarContext()
 
 	const [ password, setPassword ] = useState('')
 	const [ new_password, set_new_password ] = useState('')
@@ -72,6 +74,14 @@ export function useRecoverPassword() {
 
 		if (validationErrs) {
 			setErrors(validationErrs)
+
+			if (validationErrs.tokenErrors.length > 0) {
+				openSnackbar({
+					type: "error",
+					message: validationErrs.tokenErrors[0]
+				})
+			}
+
 			endLoading()
 			return;
 		}
@@ -82,13 +92,24 @@ export function useRecoverPassword() {
 
 		const hasNoErrors = polyfill(err, setErrors)
 		if (!hasNoErrors) {
+			openSnackbar({
+				type: 'error',
+				message: err?.toString() || "Ocorreu um erro"
+			})
 			endLoading()
 			return;
 		}
 
 		endLoading()
-		console.log(response)
-	}, [ password, new_password, token, startLoading, endLoading, polyfill ])
+		openSnackbar({
+			type: "success",
+			message: response!.message
+		})
+
+		setTimeout(async () => {
+			await push('/')
+		}, 5000)
+	}, [ startLoading, password, new_password, token, polyfill, endLoading, openSnackbar, push ])
 
 	useEffect(() => {
 		const minPasswordLength = 6
@@ -108,6 +129,6 @@ export function useRecoverPassword() {
 		isLoading,
 		isDisabled,
 		errors,
-		getErrors
+		getErrors,
 	}
 }
