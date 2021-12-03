@@ -21,7 +21,7 @@ export class LocalRecoverPassword implements LocalHandler {
 		return Object.values(errorItems).map(( v: string[] ) => v.length > 0).filter(currValue => currValue).length > 0
 	}
 
-	async handle( body: RecoverPasswordBody ): Promise<HandleResponse<RecoverPasswordBody, RecoverPasswordErrors>> {
+	async handle( body: RecoverPasswordBody ): Promise<HandleResponse<{ message: string }, RecoverPasswordErrors>> {
 		const { new_password, new_password_confirmation, token } = body;
 
 		const [ res, err ] = await localApi.post(`/recover-password?token=${ token }`, {
