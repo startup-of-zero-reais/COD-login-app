@@ -68,7 +68,7 @@ export function useLoginPage() {
 
 		setErrors(errorsInitialState)
 
-		const [ , err ] = await loginHandler.handle({ email, password })
+		const [ response, err ] = await loginHandler.handle({ email, password })
 
 		const hasNoErrors = polyfill(err, setErrors)
 
@@ -81,7 +81,10 @@ export function useLoginPage() {
 			return;
 		}
 
-		endLoading()
+		if (response) {
+			window.location.href = process.env.DASHBOARD_URL + `/validate-login?token=${ response?.token }`
+			endLoading()
+		}
 	}, [ startLoading, email, password, polyfill, endLoading, openSnackbar ]);
 
 	useEffect(() => {
