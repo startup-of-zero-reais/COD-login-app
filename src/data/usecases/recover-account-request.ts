@@ -1,4 +1,4 @@
-import { HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
+import { ErrorMessage, HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
 import { ApiHandler } from "@/data/protocols/api-handler";
 import { NextApiRequest, NextApiResponse } from "next";
 import { LocalResponse } from "../protocols/local-response";
@@ -16,12 +16,12 @@ interface RecoverAccountErrors extends RecoverAccountBody {
 
 export class LocalRecoverAccountRequest implements LocalHandler {
 
-	async handle( body: RecoverAccountBody ): Promise<HandleResponse<RecoverAccountBody, RecoverAccountErrors>> {
+	async handle( body: RecoverAccountBody ): Promise<HandleResponse<RecoverAccountBody, ErrorMessage>> {
 		const { email } = body;
 
 		const [ response, err ] = await localApi.post<RecoverAccountBody>("/recover-account", { email })
 			.then(( { data } ) => [ data, null ])
-			.catch(e => [ e.message, e.response.data.message ])
+			.catch(e => [ e.message, { message: e.response.data.message } ])
 
 		return [ response, err ]
 	}

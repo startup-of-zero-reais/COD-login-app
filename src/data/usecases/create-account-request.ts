@@ -1,4 +1,4 @@
-import { HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
+import { ErrorMessage, HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
 import { ApiHandler } from "@/data/protocols/api-handler";
 import { NextApiRequest, NextApiResponse } from "next";
 import { LocalResponse } from "@/data/protocols/local-response";
@@ -15,22 +15,38 @@ type CreateAccountBody = {
 }
 
 interface CreateAccountErrors extends CreateAccountBody {
-	form: string
+	form: string;
 }
+
+type CreateAccountResponse = {
+	id: string,
+	name: string,
+	lastname: string,
+	email: string,
+	user_type: string,
+	created_at: string,
+	updated_at: string,
+} | { message: string }
 
 export class LocalCreateAccount implements LocalHandler {
 	private static hasErrors( err: string[] ): boolean {
 		return err.length > 0
 	}
 
-	async handle( body: CreateAccountBody ): Promise<HandleResponse<CreateAccountBody, CreateAccountErrors>> {
+	async handle( body: CreateAccountBody ): Promise<HandleResponse<CreateAccountResponse, ErrorMessage>> {
 		const { name, lastname, email, password, new_password } = body;
 
-		const [ response, err ] = await localApi.post("/create-user", { name, lastname, email, password, new_password })
+		const [ response, err ] = await localApi.post<CreateAccountResponse>("/create-user", {
+			name,
+			lastname,
+			email,
+			password,
+			new_password
+		})
 			.then(( { data } ) => [ data, null ])
-			.catch(( e ) => [ e.message, e.response.data.message ])
+			.catch(( e ) => [ { message: e.message }, { message: (e.response.data.message) } ])
 
-		return [ response, err ]
+		return [ response, err ] as HandleResponse<CreateAccountResponse, ErrorMessage>
 	}
 
 	validate( body: CreateAccountBody ): HandleValidationError<CreateAccountErrors> {

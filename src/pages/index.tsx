@@ -1,18 +1,9 @@
 import { NextPage } from "next";
 import Link from "next/link"
-import {
-    Box,
-    FormControlLabel,
-    Grow,
-    IconButton,
-    InputAdornment,
-    Link as MuiLink,
-    Switch,
-    Typography
-} from "@mui/material";
+import { Box, FormControlLabel, Grow, IconButton, InputAdornment, Link as MuiLink, Switch } from "@mui/material";
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import { Button, Heading, TextField } from "@/presentation/components/shared";
-import { RenderIf, ToggleRender } from "@/presentation/utils";
+import { ToggleRender } from "@/presentation/utils";
 import { useLoginPage, usePasswordToggle } from "@/presentation/hooks";
 
 type LoginProps = {}
@@ -51,15 +42,6 @@ const Index: NextPage<LoginProps> = () => {
                     <div className={ boxStyles }>
                         <header>&lt;Code Craft Club&gt;</header>
 
-                        { RenderIf(
-                            errors.form.length > 0,
-                            (
-                                <Typography variant={ "h5" } color={ "error" } textAlign={ "center" }>
-                                    Oops! { errors.form[0] }
-                                </Typography>
-                            )
-                        ) }
-
                         <Box
                             component={ "form" }
                             onSubmit={ onSubmit }
@@ -78,8 +60,8 @@ const Index: NextPage<LoginProps> = () => {
                                         </InputAdornment>
                                     )
                                 } }
-                                error={ !!errors.email.length }
-                                helperText={ getErrorText(errors.email) }
+                                error={ !!errors.emailErrors.length }
+                                helperText={ getErrorText(errors.emailErrors) }
                             />
 
                             <TextField
@@ -106,8 +88,8 @@ const Index: NextPage<LoginProps> = () => {
                                     ),
                                     type: isPasswordVisible ? "text" : "password"
                                 } }
-                                error={ !!errors.password.length }
-                                helperText={ getErrorText(errors.password) }
+                                error={ !!errors.passwordErrors.length }
+                                helperText={ getErrorText(errors.passwordErrors) }
                             />
 
                             <div className={ bottomForm }>

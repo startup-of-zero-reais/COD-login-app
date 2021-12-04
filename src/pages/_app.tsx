@@ -6,6 +6,7 @@ import { theme } from "@/presentation/styles/shared/theme";
 import { EmotionCache } from "@emotion/utils";
 import { createEmotionCache } from "@/presentation/utils";
 import { CacheProvider } from "@emotion/react";
+import { SnackbarStack } from "@/presentation/contexts/snackbar-stack";
 
 interface MyAppProps extends AppProps {
     emotionCache?: EmotionCache
@@ -27,7 +28,9 @@ function MyApp( { Component, pageProps, emotionCache = clientSideEmotionCache }:
             <CacheProvider value={ emotionCache }>
                 <ThemeProvider theme={ theme }>
                     <CssBaseline/>
-                    <Component { ...pageProps } />
+                    <SnackbarStack>
+                        <Component { ...pageProps } />
+                    </SnackbarStack>
                 </ThemeProvider>
             </CacheProvider>
         </>

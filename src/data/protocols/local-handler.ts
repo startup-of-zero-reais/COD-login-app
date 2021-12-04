@@ -1,4 +1,8 @@
-export type HandleRequestError<T> = string | HandleValidationError<T> | null
+export type ErrorMessage = { message: string }
+
+export type HandleRequestError<T> =
+	(T extends ErrorMessage ? ErrorMessage : T extends string ? string : HandleValidationError<T>)
+	| null
 
 type ErrorKey<T extends string> = `${ T }Errors`;
 
