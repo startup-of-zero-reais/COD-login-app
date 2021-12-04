@@ -4,6 +4,7 @@ import styles from "@/presentation/styles/pages/Login.module.scss";
 import { makeLocalCreateAccount } from "@/data/factories/create-account-factory";
 import { useErrorPolyfill, useLoading } from "@/presentation/hooks";
 import { useRouter } from "next/router";
+import { useSnackbarContext } from "@/presentation/contexts/snackbar-stack";
 
 type CreateAccountStates = {
 	name: string;
@@ -53,6 +54,7 @@ export function useCreateAccount() {
 	const { polyfill } = useErrorPolyfill()
 	const [ errors, setErrors ] = useState(errorsInitialState)
 	const { isLoading, startLoading, endLoading } = useLoading()
+	const { openSnackbar } = useSnackbarContext()
 
 	const onChange = useCallback(( field: Actions['type'] ) => {
 		return ( e: ChangeEvent<HTMLInputElement> ) => {
@@ -96,13 +98,17 @@ export function useCreateAccount() {
 
 		const hasNotError = polyfill(err, setErrors)
 		if (!hasNotError) {
+			openSnackbar({
+				type: 'error',
+				message: err?.message || 'Ocorreu algum erro',
+			})
 			endLoading()
 			return;
 		}
 
 		endLoading()
 		await replace("/conta-criada")
-	}, [ state, polyfill, startLoading, endLoading, replace ])
+	}, [ startLoading, state.name, state.lastname, state.email, state.password, state.confirmPassword, polyfill, endLoading, replace, openSnackbar ])
 
 	return {
 		createAccountStyles,
