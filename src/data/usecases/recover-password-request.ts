@@ -1,4 +1,4 @@
-import { HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
+import { ErrorMessage, HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
 import { ApiHandler } from "@/data/protocols/api-handler";
 import { NextApiRequest, NextApiResponse } from "next";
 import { LocalResponse } from "@/data/protocols/local-response";
@@ -21,7 +21,7 @@ export class LocalRecoverPassword implements LocalHandler {
 		return Object.values(errorItems).map(( v: string[] ) => v.length > 0).filter(currValue => currValue).length > 0
 	}
 
-	async handle( body: RecoverPasswordBody ): Promise<HandleResponse<{ message: string }, RecoverPasswordErrors>> {
+	async handle( body: RecoverPasswordBody ): Promise<HandleResponse<{ message: string }, ErrorMessage>> {
 		const { new_password, new_password_confirmation, token } = body;
 
 		const [ res, err ] = await localApi.post(`/recover-password?token=${ token }`, {
@@ -29,7 +29,7 @@ export class LocalRecoverPassword implements LocalHandler {
 			new_password_confirmation
 		})
 			.then(( { data } ) => [ data, null ])
-			.catch(e => [ null, e.response.data.message || e.message ])
+			.catch(e => [ null, { message: e.response.data.message || e.message } ])
 
 		return [ res, err ]
 	}

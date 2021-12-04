@@ -94,7 +94,7 @@ export function useRecoverPassword() {
 		if (!hasNoErrors) {
 			openSnackbar({
 				type: 'error',
-				message: err?.toString() || "Ocorreu um erro"
+				message: err?.message || "Ocorreu um erro"
 			})
 			endLoading()
 			return;

@@ -1,9 +1,10 @@
 import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from "react";
-import { makeLocalRecoverAccount } from "@/data/factories/recover-account-factory";
 import classNames from "classnames";
+import { useRouter } from "next/router";
+import { makeLocalRecoverAccount } from "@/data/factories/recover-account-factory";
 import styles from "@/presentation/styles/pages/Login.module.scss";
 import { useErrorPolyfill, useLoading } from "@/presentation/hooks";
-import { useRouter } from "next/router";
+import { useSnackbarContext } from "@/presentation/contexts/snackbar-stack";
 
 type Errors = {
 	emailErrors: string[];
@@ -24,6 +25,7 @@ export function useRecoverAccount() {
 	const { isLoading, startLoading, endLoading } = useLoading()
 	const { polyfill } = useErrorPolyfill()
 	const { replace } = useRouter()
+	const { openSnackbar } = useSnackbarContext()
 
 	const onChange = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
 		setEmail(e.target.value)
@@ -58,13 +60,17 @@ export function useRecoverAccount() {
 		const hasNotErrors = polyfill(err, setErrors)
 
 		if (!hasNotErrors) {
+			openSnackbar({
+				type: "error",
+				message: err?.message || "Ocorreu um erro"
+			})
 			endLoading()
 			return;
 		}
 
 		endLoading()
 		await replace("/")
-	}, [ email, startLoading, endLoading, polyfill, replace ])
+	}, [ startLoading, email, polyfill, endLoading, replace, openSnackbar ])
 
 	const isDisabled = useMemo(() => (email.length < 3 || !email.match(/@/gi)), [ email ])
 
