@@ -50,7 +50,7 @@ export class LocalLoginRequest implements LocalHandler {
 		return null
 	}
 
-	public async handle( body: LoginBody ): Promise<HandleResponse<LoginBody, ErrorMessage>> {
+	public async handle( body: LoginBody ): Promise<HandleResponse<LoginResponse, ErrorMessage>> {
 		const { email, password } = body;
 
 		const [ response, requestErr ] = await localApi.post<LoginResponse>("/login", { email, password })
