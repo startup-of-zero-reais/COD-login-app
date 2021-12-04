@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { localApi, usersApi } from "@/data/apis";
 import { LocalResponse } from "@/data/protocols/local-response";
 import { ApiHandler } from "@/data/protocols/api-handler";
-import { HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
+import { ErrorMessage, HandleResponse, HandleValidationError, LocalHandler } from "@/data/protocols/local-handler";
 import { ValidatorBuilder, ValidatorComposite } from "@/validators";
 import { ErrorProtocol } from "@/data/protocols/error-protocol";
 
@@ -50,12 +50,12 @@ export class LocalLoginRequest implements LocalHandler {
 		return null
 	}
 
-	public async handle( body: LoginBody ): Promise<HandleResponse<LoginBody, LoginErrorBody>> {
+	public async handle( body: LoginBody ): Promise<HandleResponse<LoginBody, ErrorMessage>> {
 		const { email, password } = body;
 
 		const [ response, requestErr ] = await localApi.post<LoginResponse>("/login", { email, password })
 			.then(( { data } ) => [ data, null ])
-			.catch(err => [ err.message, err.response.data.message ])
+			.catch(err => [ err.message, { message: err.response.data.message } ])
 
 		return [ response, requestErr ]
 	}
